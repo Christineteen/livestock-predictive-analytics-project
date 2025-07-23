@@ -1,0 +1,40 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+import seaborn as sns
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
+file_path='animal.csv'
+df=pd.read_csv(file_path)
+missing_values=df.isnull().sum()
+print("missing values")
+print(missing_values)
+df_encoded=pd.get_dummies(df, columns=['Symptom 1','Symptom 2','Symptom 3'])
+print("Encoded Dataframe")
+print(df_encoded.head())
+
+plt.figure(figsize=(12,6))
+
+plt.subplot(2,2,1)
+sns.histplot(df['Age'],kde=True)
+plt.title('Distribution of Age')
+
+plt.subplot(2,2,2)
+sns.boxplot(x=df['Age'])
+plt.title('Boxplot of Age')
+
+plt.subplot(2,2,2)
+sns.histplot(df['Temperature'],kde=True)
+plt.title('Distribution of Temperature')
+
+plt.subplot(2,2,2)
+sns.boxplot(x=df['Temperature'])
+plt.title('Boxplot of Temperature')
+
+plt.tight_layout()
+plt.show()
+
+sns.countplot(x='Disease', data=df)
+plt.title('Distribution of Disease')
+plt.show()

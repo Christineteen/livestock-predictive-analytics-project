@@ -1,0 +1,112 @@
+!<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livestock Health</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<header>
+    <h1>Livestock Health Monitor</h1>
+</header>
+
+<main>
+    <form id="livestockForm">
+        <label for="age">Age:</label>
+<input type="number" id="age" name="age" required>
+
+<label for="temperature">Temperature:</label>
+<input type="number" id="temperature" name="temperature" required>
+
+<label for="symptom1">Symptom 1:</label>
+<input type="text" id="symptom1" name="symptom1" required>
+
+<label for="symptom2">Symptom 2:</label>
+<input type="text" id="symptom2" name="symptom2" required>
+
+<label for="symptom3">Symptom 3:</label>
+<input type="text" id="symptom3" name="symptom3" required>
+
+<label for="animal">Animal:</label>
+<select id="animal" name="animal">         
+    <option value="cow">Cow</option>
+    <option value="sheep">Sheep</option>
+    <option value="goat">Goat</option>      
+</select>
+
+
+        <!-- Add more input fields as needed for symptoms -->
+
+        <button type="button" onclick="predictDisease()">Predict Disease</button>
+    </form>
+
+    <h2 id="predictedDisease"></h2>
+    <p id="recommendation"></p>
+</main>
+
+<script>
+    function predictDisease() {
+        // Collect input data from the form fields
+        const formData = new FormData(document.getElementById('livestockForm'));
+
+        // Convert form data to JSON object
+        const jsonData = {};
+        formData.forEach((value, key) => { jsonData[key] = value; });
+
+        // Send data to Flask backend for prediction
+        fetch('/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(jsonData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update UI with prediction results
+            document.getElementById('predictedDisease').textContent = `Predicted Disease: ${data.prediction}`;
+            document.getElementById('recommendation').textContent = `Recommendation: ${data.recommendation}`;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+<body>
+    
+</body>
+</html>
